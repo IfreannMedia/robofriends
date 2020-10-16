@@ -7,13 +7,8 @@ import 'tachyons';
 import {robots} from './models/robots.js'
 
 
-ReactDOM.render(<div>
-	<Card robot={robots[0]}/>
-	<Card robot={robots[1]}/>
-	<Card robot={robots[2]}/>
-	<Card robot={robots[3]}/>
-	<Card robot={robots[4]}/>
-	</div>, document.getElementById('root'));
+ReactDOM.render(
+       robots.map(el => <Card robot={el} />), document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
