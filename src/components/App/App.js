@@ -1,45 +1,49 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import './App.css';
 import CardList from '../card-list/CardList';
 import SearchBox from '../SearchBox/SearchBox';
 import Scroll from '../Scroll/Scroll';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
-class App extends Component {
+function App() {
 
-  constructor() {
-    super();
-    this.state = {
-      robots: [],
-      searchfield: ''
-    }
+  const [robots, setRobots] = useState([])
+  const [searchField, setSearchField] = useState('')
+  // constructor() {
+  //   super();
+  //   this.state = {
+  //     robots: [],
+  //     searchfield: ''
+  //   }
+  // }
+
+  // componentDidMount() {
+  //   this.fetchUsers().then(users => {
+  //     this.setState({ robots: users });
+  //   })
+  // }
+
+  const onSearchChange = (event) => {
+    setSearchField(event.target.value);
   }
 
-  componentDidMount() {
-    this.fetchUsers().then(users => {
-      this.setState({ robots: users });
-    })
-  }
-
-  onSearchChange = (event) => {
-    this.setState({ searchfield: event.target.value });
-  }
-
-  fetchUsers() {
+  const fetchUsers = () => {
     return fetch('https://jsonplaceholder.typicode.com/users').then(r => {
       return r.json();
     })
   }
 
-
-  render() {
-    const filteredRobots = this.state.robots.filter(r =>
+  useEffect(()=>{
+    console.log('FETCH');
+    fetchUsers().then(response => setRobots(response));
+  },[]);
+    const filteredRobots = robots.filter(r =>
       r.name.toLowerCase().includes(
-        this.state.searchfield.toLowerCase()));
+        searchField.toLowerCase()));
     return (
       <div className="tc" style={{ overflowY: 'hidden' }} >
         <h1 className="f1">Robofriends</h1>
-        <SearchBox searchChange={this.onSearchChange} />
+        <SearchBox searchChange={onSearchChange} />
         <Scroll>
           <ErrorBoundary>
             <CardList robots={filteredRobots}></CardList>
@@ -47,7 +51,6 @@ class App extends Component {
         </Scroll>
       </div>
     );
-  }
 }
 
 export default App;
